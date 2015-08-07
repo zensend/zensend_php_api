@@ -148,7 +148,7 @@ EOT
     $request = new SmsRequest();
     $request->body = "TEST HELLO";
     $request->originator = "ORIG";
-    $request->numbers = ["447796354848","447796354849"];
+    $request->numbers = array("447796354848","447796354849");
     $result = $client->send_sms($request);
 
     $this->assertSame($result->numbers, 2);
@@ -255,7 +255,7 @@ EOT
     $request = new SmsRequest();
     $request->body = "TEST HELLO";
     $request->originator = "ORIG";
-    $request->numbers = ["447796354848"];
+    $request->numbers = array("447796354848");
 
     $result = $client->send_sms($request);
 
@@ -296,7 +296,7 @@ EOT
     $request = new SmsRequest();
     $request->body = "£HELLO";
     $request->originator = "ORIG";
-    $request->numbers = ["447796354848"];
+    $request->numbers = array("447796354848");
 
     $result = $client->send_sms($request);
 
@@ -313,7 +313,7 @@ EOT
     $request = new SmsRequest();
     $request->body = "TEST HELLO";
     $request->originator = "ORIG";
-    $request->numbers = ["447796354848"];
+    $request->numbers = array("447796354848");
     return $request;
   }
 
@@ -444,7 +444,7 @@ EOT
       $request = new SmsRequest();
       $request->body = "TEST HELLO";
       $request->originator = "ORIG";
-      $request->numbers = ["44779635,4848"];
+      $request->numbers = array("44779635,4848");
       $client->send_sms($request);
     } catch (\InvalidArgumentException $e) {
       return;
@@ -459,7 +459,7 @@ EOT
     try {
       $request = new SmsRequest();
       $request->originator = "ORIG";
-      $request->numbers = ["447796354848"];
+      $request->numbers = array("447796354848");
       $client->send_sms($request);
     } catch (\InvalidArgumentException $e) {
       return;
@@ -490,7 +490,7 @@ EOT
     $request = new SmsRequest();
     $request->body = "TEST HELLO";
     $request->originator = "ORIG";
-    $request->numbers = ["447796354848"];
+    $request->numbers = array("447796354848");
     $request->originator_type = "alpha";
     $request->encoding = "gsm";
     $request->timetolive_in_minutes = 60;
