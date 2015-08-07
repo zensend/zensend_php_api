@@ -1,5 +1,5 @@
 {
-    "name": "zensend/zensend-php",
+    "name": "zensend/zensend",
     "description": "ZenSend PHP Library",
     "require": {
       "php": ">=5.3.3",
