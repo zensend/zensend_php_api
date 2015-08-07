@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/zensend/zensend_php_api.svg?branch=master)](https://travis-ci.org/zensend/zensend_php_api)
 # ZenSend PHP bindings
 
 You can sign up for a ZenSend account at https://zensend.io.
