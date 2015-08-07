@@ -1,0 +1,14 @@
+<?php
+namespace ZenSend;
+
+class SmsResponse
+{
+  public $tx_guid;
+  public $numbers;
+  public $sms_parts;
+  public $encoding;
+  public $cost_in_pence;
+  public $new_balance_in_pence;
+}
+
+?>
