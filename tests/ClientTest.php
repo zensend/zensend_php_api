@@ -20,7 +20,7 @@ class Request {
 
 $stubbed_response = null;
 
-$request_history = [];
+$request_history = array();
 
 function curl_request_history()
 {
@@ -107,7 +107,7 @@ function stub_request($content_type, $http_code, $body)
   $stubbed_response->body = $body;
 
   global $request_history;
-  $request_history = [];
+  $request_history = array();
 }
 
 function stub_error($curl_error, $curl_message)
@@ -120,7 +120,7 @@ function stub_error($curl_error, $curl_message)
   $stubbed_response->error = $curl_message;
 
   global $request_history;
-  $request_history = [];
+  $request_history = array();
 }
 
 class ClientTest extends \PHPUnit_Framework_TestCase
