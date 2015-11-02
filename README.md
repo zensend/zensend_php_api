@@ -48,7 +48,7 @@ Simple usage looks like:
 
 ## Documentation
 
-Please see https://zensend.io/docs for up-to-date documentation.
+Please see https://zensend.io/public/docs for up-to-date documentation.
 
 ## String Encoding
 
