@@ -13,7 +13,7 @@ You can install the bindings via [Composer](http://getcomposer.org/). Add this t
 
     {
       "require": {
-        "zensend/zensend": "*"
+        "zensend/zensend": "1.0.0"
       }
     }
 
