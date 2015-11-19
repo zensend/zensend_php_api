@@ -99,6 +99,8 @@ class Client
         $full_url = $full_url . "?" . $encoded;
       }
     }
+
+    $opts[CURLOPT_SSL_VERIFYPEER] = 1;
     $opts[CURLOPT_URL] = $full_url;
 
     // these options require php 5.2.3
