@@ -27,7 +27,7 @@ To use the bindings, use Composer's [autoload](https://getcomposer.org/doc/00-in
 
 ## Manual Installation
 
-If you do not wish to use Composer, you can download the [latest release](https://github.com/fonixcode/zensend_php_api/releases). Then, to use the bindings, include the `init.php` file.
+If you do not wish to use Composer, you can download the [latest release](https://github.com/zensend/zensend_php_api/releases). Then, to use the bindings, include the `init.php` file.
 
     require_once('/path/to/zensend_php_api/init.php');
 
