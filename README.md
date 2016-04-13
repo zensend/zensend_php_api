@@ -50,6 +50,18 @@ Simple usage looks like:
 
 Please see https://zensend.io/public/docs for up-to-date documentation.
 
+## Certificate Errors
+
+If you receive errors like:
+
+    "SSL certificate problem: unable to get local issuer certificate"
+
+This is likely because your php curl is not set up with a certificate bundle. This can be fixed by following the instructions here: https://support.zend.com/hc/en-us/articles/204159368-PHP-CURL-HTTPS-Error-SSL-certificate-problem-unable-to-get-local-issuer-certificate-
+
+Or alternatively we have included the CA certificates that we require in a bundle which can be used by creating the ZenSend Client like:
+
+   $client = ZenSend\Client::newWithHardcodedCA("api_key");
+
 ## String Encoding
 
 All strings sent to the API should be UTF-8 encoded.

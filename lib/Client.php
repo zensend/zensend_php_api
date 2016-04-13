@@ -10,11 +10,23 @@ class Client
   private $url;
   private $http_options;
 
-  public function __construct($apiKey, $http_options = array(), $url = "https://api.zensend.io")
+  public function __construct($apiKey, $http_options = array(), $url = "https://api.zensend.io", $ca_file = NULL)
   {
     $this->apiKey = $apiKey;
     $this->url = $url;
     $this->http_options = $http_options;
+    $this->ca_file = $ca_file;
+  }
+
+
+  public static function newWithHardcodedCA($apiKey)
+  {
+    return new Client($apiKey, array(), "https://api.zensend.io", Client::ca_file());
+  }
+
+  public static function ca_file()
+  {
+    return dirname(__FILE__) . '/../data/GeoTrust_Global_CA.pem';
   }
 
   public function lookup_operator($msisdn)
@@ -100,7 +112,11 @@ class Client
       }
     }
 
-    $opts[CURLOPT_SSL_VERIFYPEER] = 1;
+    $opts[CURLOPT_SSL_VERIFYPEER] = TRUE;
+    if ($this->ca_file != NULL) {
+      $opts[CURLOPT_CAINFO] = $this->ca_file;
+    }
+
     $opts[CURLOPT_URL] = $full_url;
 
     // these options require php 5.2.3
