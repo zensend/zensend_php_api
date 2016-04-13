@@ -10,18 +10,17 @@ class Client
   private $url;
   private $http_options;
 
-  public function __construct($apiKey, $http_options = array(), $url = "https://api.zensend.io", $ca_file = NULL)
+  public function __construct($apiKey, $http_options = array(), $url = "https://api.zensend.io")
   {
     $this->apiKey = $apiKey;
     $this->url = $url;
     $this->http_options = $http_options;
-    $this->ca_file = $ca_file;
   }
 
 
   public static function newWithHardcodedCA($apiKey)
   {
-    return new Client($apiKey, array(), "https://api.zensend.io", Client::ca_file());
+    return new Client($apiKey, array("ca_file" => Client::ca_file()));
   }
 
   public static function ca_file()
@@ -113,8 +112,10 @@ class Client
     }
 
     $opts[CURLOPT_SSL_VERIFYPEER] = TRUE;
-    if ($this->ca_file != NULL) {
-      $opts[CURLOPT_CAINFO] = $this->ca_file;
+    $ca_file = $this->default_value($this->http_options, "ca_file", NULL);
+
+    if ($ca_file != NULL) {
+      $opts[CURLOPT_CAINFO] = $ca_file;
     }
 
     $opts[CURLOPT_URL] = $full_url;
