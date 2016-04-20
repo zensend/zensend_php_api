@@ -59,16 +59,16 @@ After authenticating the user display the verify iframe using the following code
 
 Create another file called verify_callback.php to handle verification:
 
-  <?php
-    session_start();
-    $verify = new ZenSend\Verify("api_key");
-    try {
-      $verify->verify_response("441234567890");  // the number you want to verify
-      // handle verification success
-    } catch (Exception $e) {
-      // handle verification failed
-    }
-  ?>
+    <?php
+      session_start();
+      $verify = new ZenSend\Verify("api_key");
+      try {
+        $verify->verify_response("441234567890");  // the number you want to verify
+        // handle verification success
+      } catch (Exception $e) {
+        // handle verification failed
+      }
+    ?>
 
 ## Documentation
 
