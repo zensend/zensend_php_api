@@ -28,6 +28,7 @@ class Client
     return dirname(__FILE__) . '/../data/GeoTrust_Global_CA.pem';
   }
 
+
   public function lookup_operator($msisdn)
   {
 
@@ -40,6 +41,30 @@ class Client
     $response->new_balance_in_pence = $json["new_balance_in_pence"];
 
     return $response;
+  }
+
+  public function create_keyword($keyword_request)
+  {
+    $http_params = array(
+      "SHORTCODE" => $this->required($keyword_request, "shortcode"),
+      "KEYWORD" => $this->required($keyword_request, "keyword")
+    );
+
+    if (isset($keyword_request->is_sticky)) {
+      $http_params["IS_STICKY"] = $keyword_request->is_sticky ? "true" : "false";
+    }
+
+    if (isset($keyword_request->mo_url)) {
+      $http_params["MO_URL"] = $keyword_request->mo_url;
+    }
+
+    $json = $this->make_request(true, "/v3/keywords", $http_params);
+    $response = new CreateKeywordResponse();
+    $response->cost_in_pence = $json["cost_in_pence"];
+    $response->new_balance_in_pence = $json["new_balance_in_pence"];
+    
+    return $response;
+
   }
 
   public function send_sms($sms_request)

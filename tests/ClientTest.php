@@ -568,5 +568,70 @@ EOT
   }
 
 
+  public function testCreateKeyword()
+  {
+
+    stub_request("application/json", 200, <<<EOT
+    {
+      "success": {
+          "cost_in_pence": 12.34,
+          "new_balance_in_pence": 10.2
+      }
+    }
+EOT
+    );
+
+    $client = new Client("API_KEY");
+    $request = new CreateKeywordRequest();
+    $request->shortcode = "SC";
+    $request->keyword = "KW";
+
+    $result = $client->create_keyword($request);
+
+    $this->assertSame($result->cost_in_pence, 12.34);
+    $this->assertSame($result->new_balance_in_pence, 10.2);
+
+    $history = curl_request_history();
+
+    $this->assertSame(count($history), 1);
+    $this->assertSame($history[0]->is_post, true);
+    $this->assertSame($history[0]->post_body, "SHORTCODE=SC&KEYWORD=KW");
+    $this->assertSame($history[0]->url, "https://api.zensend.io/v3/keywords");
+    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));    
+  } 
+
+  public function testCreateKeywordWithOptionalParameters()
+  {
+
+    stub_request("application/json", 200, <<<EOT
+    {
+      "success": {
+          "cost_in_pence": 12.34,
+          "new_balance_in_pence": 10.2
+      }
+    }
+EOT
+    );
+
+    $client = new Client("API_KEY");
+    $request = new CreateKeywordRequest();
+    $request->shortcode = "SC";
+    $request->keyword = "KW";
+    $request->is_sticky = TRUE;
+    $request->mo_url = "http://url";
+
+    $result = $client->create_keyword($request);
+
+    $this->assertSame($result->cost_in_pence, 12.34);
+    $this->assertSame($result->new_balance_in_pence, 10.2);
+
+    $history = curl_request_history();
+
+    $this->assertSame(count($history), 1);
+    $this->assertSame($history[0]->is_post, true);
+    $this->assertSame($history[0]->post_body, "SHORTCODE=SC&KEYWORD=KW&IS_STICKY=true&MO_URL=http%3A%2F%2Furl");
+    $this->assertSame($history[0]->url, "https://api.zensend.io/v3/keywords");
+    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));    
+  } 
 
 }
