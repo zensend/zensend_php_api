@@ -11,10 +11,10 @@ class Verify
     $this->client = new Client($api_key, $http_options, "https://api.zensend.io", $verify_url);
   }
 
-  public function create_session($msisdn)
+  public function create_session($msisdn, $verify_options = NULL)
   {
     $this->assert_session();
-    $session = $this->client->create_msisdn_verification($msisdn);
+    $session = $this->client->create_msisdn_verification($msisdn, $verify_options);
     $_SESSION["zensend_msisdn_verification_session"] = $session;
     return $session;
   }

@@ -12,8 +12,10 @@
     if ($user && $user["password"] == $_POST["password"]) {
       session_start();
       $_SESSION["username"] = $username;
-
-      $verify->create_session($user["msisdn"]);
+      $options = new ZenSend\VerifyOptions();
+      $options->message = "{{token}} is your COMPANY verification code";
+      $options->originator = "YOURCOMPANY";
+      $verify->create_session($user["msisdn"], $options);
       header("Location: /msisdn_verify.php"); 
     } else {
       $error = "Invalid username or password";
