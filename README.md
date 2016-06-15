@@ -46,6 +46,30 @@ Simple usage looks like:
     echo $result->encoding;
     echo $result->tx_guid;
 
+## Verify Getting Started
+
+After authenticating the user display the verify iframe using the following code:
+
+    <?php
+      session_start();
+      $verify = new ZenSend\Verify("api_key");
+      $verify->create_session("441234567890"); // the number you want to verify
+      $verify->write_tags("https://" . $_SERVER['HTTP_HOST'] . "/verify_callback.php");
+    ?>
+
+Create another file called verify_callback.php to handle verification:
+
+    <?php
+      session_start();
+      $verify = new ZenSend\Verify("api_key");
+      try {
+        $verify->verify_response("441234567890");  // the number you want to verify
+        // handle verification success
+      } catch (Exception $e) {
+        // handle verification failed
+      }
+    ?>
+
 ## Documentation
 
 Please see https://zensend.io/public/docs for up-to-date documentation.
@@ -80,7 +104,11 @@ To run the test suite:
 
     ~/.composer/vendor/bin/psysh
     >>> require('./init.php')
-    >>> $client = new ZenSend\Client("api_key", "http://127.0.0.1:8084");
+    >>> $client = new ZenSend\Client("api_key", array(), "http://127.0.0.1:8084", "http://verify.fonix.dev");
     >>> $response = $client->lookup_operator("441234567890");
-
+    >>> $client->create_msisdn_verification("441234567890");
+    >>> $client->msisdn_verification_status("a33d10fe587096a0b70d3701fc2c9f7e")
+    >>> $verify = new ZenSend\Verify("api_key", array(), "http://verify.fonix.dev");
+    >>> $verify->create_session("441234567890")
+    >>> $verify->write_tags("callback");
 

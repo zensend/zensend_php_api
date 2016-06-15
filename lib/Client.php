@@ -10,10 +10,11 @@ class Client
   private $url;
   private $http_options;
 
-  public function __construct($apiKey, $http_options = array(), $url = "https://api.zensend.io")
+  public function __construct($apiKey, $http_options = array(), $url = "https://api.zensend.io", $verify_url = "https://verify.zensend.io")
   {
     $this->apiKey = $apiKey;
     $this->url = $url;
+    $this->verify_url = $verify_url;
     $this->http_options = $http_options;
   }
 
@@ -31,7 +32,7 @@ class Client
   public function lookup_operator($msisdn)
   {
 
-    $json = $this->make_request(false, "/v3/operator_lookup", array("NUMBER" => $msisdn));
+    $json = $this->make_request($this->url, false, "/v3/operator_lookup", array("NUMBER" => $msisdn));
     $response = new OperatorLookupResponse();
     $response->mcc = $json["mcc"];
     $response->mnc = $json["mnc"];
@@ -64,7 +65,7 @@ class Client
     }
 
 
-    $json = $this->make_request(true, "/v3/sendsms", $http_params);
+    $json = $this->make_request($this->url, true, "/v3/sendsms", $http_params);
     $response = new SmsResponse();
     $response->tx_guid = $json["txguid"];
     $response->numbers = $json["numbers"];
@@ -79,19 +80,46 @@ class Client
   public function check_balance()
   {
 
-    $json = $this->make_request(false, "/v3/checkbalance", array());
+    $json = $this->make_request($this->url, false, "/v3/checkbalance", array());
 
     return $json["balance"];
   }
 
   public function get_prices()
   {
-    $json = $this->make_request(false, "/v3/prices", array());
+    $json = $this->make_request($this->url, false, "/v3/prices", array());
 
     return $json["prices_in_pence"];
   }
 
-  private function make_request($is_post, $path, $params)
+  public function create_msisdn_verification($msisdn, $verify_options = NULL)
+  {
+
+    $http_params = array("NUMBER" => $msisdn);
+
+    if ($verify_options != NULL) {
+      if (isset($verify_options->message)) {
+        $http_params["MESSAGE"] = $verify_options->message;
+      }
+
+      if (isset($verify_options->originator)) {
+        $http_params["ORIGINATOR"] = $verify_options->originator;
+      }
+    }
+
+    $json = $this->make_request($this->verify_url, true, "/api/msisdn_verify", $http_params);
+
+    return $json["session"]; 
+  }
+
+  public function msisdn_verification_status($session)
+  {
+    $http_params = array("SESSION" => $session);
+    $json = $this->make_request($this->verify_url, false, "/api/msisdn_verify", $http_params);
+    return $json["msisdn"];
+  }
+
+  private function make_request($url, $is_post, $path, $params)
   {
     $curl = curl_init();
     // we don't use try/finally here for < php 5.5 compat
@@ -101,7 +129,7 @@ class Client
     $opts = array();
     $opts[CURLOPT_RETURNTRANSFER] = 1;
     $opts[CURLOPT_USERAGENT] = "ZenSend PHP";
-    $full_url = $this->url . $path;
+    $full_url = $url . $path;
     if ($is_post) {
       $opts[CURLOPT_POST] = 1;
       $opts[CURLOPT_POSTFIELDS] = $encoded;
