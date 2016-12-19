@@ -92,6 +92,18 @@ class Client
     return $json["prices_in_pence"];
   }
 
+  public function create_sub_account($name)
+  {
+    $http_params = array("NAME" => $name);
+
+    $json = $this->make_request($this->url, true, "/v3/sub_accounts", $http_params);
+
+    $response = new CreateSubAccountResponse();
+    $response->api_key = $json["api_key"];
+    $response->name = $json["name"];    
+    return $response;
+  }
+  
   public function create_msisdn_verification($msisdn, $verify_options = NULL)
   {
 

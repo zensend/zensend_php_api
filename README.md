@@ -111,4 +111,5 @@ To run the test suite:
     >>> $verify = new ZenSend\Verify("api_key", array(), "http://verify.fonix.dev");
     >>> $verify->create_session("441234567890")
     >>> $verify->write_tags("callback");
+    >>> $client.create_sub_account("Name");
 

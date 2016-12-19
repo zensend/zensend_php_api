@@ -127,6 +127,35 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 {
 
 
+  public function testCreateSubAccount()
+  {
+
+    stub_request("application/json", 200, <<<EOT
+    {
+      "success": {
+          "api_key": "ApiKey",
+          "name": "Name"
+      }
+    }
+EOT
+    );
+
+    $client = new Client("API_KEY");
+    $result = $client->create_sub_account("Name");
+
+    $this->assertSame($result->api_key, "ApiKey");
+    $this->assertSame($result->name, "Name");
+
+    $history = curl_request_history();
+
+    $this->assertSame(count($history), 1);
+    $this->assertSame($history[0]->is_post, true);
+    $this->assertSame($history[0]->post_body, "NAME=Name");
+    $this->assertSame($history[0]->url, "https://api.zensend.io/v3/sub_accounts");
+    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));    
+
+
+  }
   public function testSendMultipleSms()
   {
 
