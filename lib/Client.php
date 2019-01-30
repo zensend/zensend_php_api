@@ -36,8 +36,7 @@ class Client
     $response->mcc = $json["mcc"];
     $response->mnc = $json["mnc"];
     $response->operator = $json["operator"];
-    $response->cost_in_pence = $json["cost_in_pence"];
-    $response->new_balance_in_pence = $json["new_balance_in_pence"];
+    $response->cost_in_pence = $json["price"];
 
     return $response;
   }
@@ -70,25 +69,9 @@ class Client
     $response->numbers = $json["numbers"];
     $response->sms_parts = $json["smsparts"];
     $response->encoding = $json["encoding"];
-    $response->cost_in_pence = $json["cost_in_pence"];
-    $response->new_balance_in_pence = $json["new_balance_in_pence"];
-    
+    $response->cost_in_pence = $json["price"];
+
     return $response;
-  }
-
-  public function check_balance()
-  {
-
-    $json = $this->make_request($this->url, false, "/v3/checkbalance", array());
-
-    return $json["balance"];
-  }
-
-  public function get_prices()
-  {
-    $json = $this->make_request($this->url, false, "/v3/prices", array());
-
-    return $json["prices_in_pence"];
   }
 
 
@@ -157,7 +140,7 @@ class Client
     } else {
       throw new ZenSendException($rcode, null);
     }
-  
+
   }
 
 
@@ -188,7 +171,7 @@ class Client
       throw new \InvalidArgumentException("Required: " . $parameter);
     }
     return $params->{$parameter};
-  }  
+  }
 }
 
 ?>

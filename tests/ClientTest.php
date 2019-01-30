@@ -35,7 +35,7 @@ function curl_init()
   return $req;
 }
 
-function curl_setopt_array($curl, $opts) 
+function curl_setopt_array($curl, $opts)
 {
 
   if (isset($opts[CURLOPT_POST])) {
@@ -137,8 +137,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
           "numbers": 2,
           "smsparts": 1,
           "encoding": "gsm",
-          "cost_in_pence": 12.34,
-          "new_balance_in_pence": 10.2
+          "price": 12.34
       }
     }
 EOT
@@ -156,7 +155,6 @@ EOT
     $this->assertSame($result->encoding, "gsm");
     $this->assertSame($result->tx_guid, "7CDEB38F-4370-18FD-D7CE-329F21B99209");
     $this->assertSame($result->cost_in_pence, 12.34);
-    $this->assertSame($result->new_balance_in_pence, 10.2);
 
     $history = curl_request_history();
 
@@ -164,7 +162,7 @@ EOT
     $this->assertSame($history[0]->is_post, true);
     $this->assertSame($history[0]->post_body, "BODY=TEST+HELLO&ORIGINATOR=ORIG&NUMBERS=447796354848%2C447796354849");
     $this->assertSame($history[0]->url, "https://api.zensend.io/v3/sendsms");
-    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));    
+    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));
   }
 
   public function testOperatorLookup()
@@ -176,8 +174,7 @@ EOT
           "mcc": "123",
           "mnc": "456",
           "operator": "o2-uk",
-          "cost_in_pence": 2.5,
-          "new_balance_in_pence": 10.2
+          "price": 2.5
       }
     }
 EOT
@@ -192,7 +189,6 @@ EOT
     $this->assertSame($result->mnc, "456");
     $this->assertSame($result->operator, "o2-uk");
     $this->assertSame($result->cost_in_pence, 2.5);
-    $this->assertSame($result->new_balance_in_pence, 10.2);
 
     $history = curl_request_history();
 
@@ -200,8 +196,8 @@ EOT
     $this->assertSame($history[0]->is_post, false);
     $this->assertSame($history[0]->post_body, null);
     $this->assertSame($history[0]->url, "https://api.zensend.io/v3/operator_lookup?NUMBER=441234567890");
-    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));    
-  } 
+    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));
+  }
 
 
   public function testOperatorLookupError()
@@ -210,9 +206,8 @@ EOT
     stub_request("application/json", 503, <<<EOT
     {
       "failure": {
-          "failcode": "DATA_MISSING",
-          "cost_in_pence": 2.5,
-          "new_balance_in_pence": 10.2
+          "failcode": "TOO_MANY_CHARACTERS",
+          "parameter": "body"
       }
     }
 EOT
@@ -225,14 +220,12 @@ EOT
       $client->lookup_operator("441234567890");
     } catch (\ZenSend\ZenSendException $e) {
       $this->assertSame($e->http_code, 503);
-      $this->assertSame($e->failcode, "DATA_MISSING");
-      $this->assertSame($e->parameter, null);
-      $this->assertSame($e->cost_in_pence, 2.5);
-      $this->assertSame($e->new_balance_in_pence, 10.2);
+      $this->assertSame($e->failcode, "TOO_MANY_CHARACTERS");
+      $this->assertSame($e->parameter, "body");
       return;
     }
- 
-  } 
+
+  }
 
   public function testSendSms()
   {
@@ -244,8 +237,7 @@ EOT
           "numbers": 1,
           "smsparts": 1,
           "encoding": "gsm",
-          "cost_in_pence": 12.34,
-          "new_balance_in_pence": 10.2
+          "price": 12.34
       }
     }
 EOT
@@ -264,7 +256,6 @@ EOT
     $this->assertSame($result->encoding, "gsm");
     $this->assertSame($result->tx_guid, "7CDEB38F-4370-18FD-D7CE-329F21B99209");
     $this->assertSame($result->cost_in_pence, 12.34);
-    $this->assertSame($result->new_balance_in_pence, 10.2);
 
     $history = curl_request_history();
 
@@ -286,8 +277,7 @@ EOT
           "numbers": 1,
           "smsparts": 1,
           "encoding": "gsm",
-          "cost_in_pence": 12.34,
-          "new_balance_in_pence": 10.2
+          "price": 12.34
       }
     }
 EOT
@@ -307,8 +297,8 @@ EOT
     $this->assertSame($history[0]->is_post, true);
     $this->assertSame($history[0]->post_body, "BODY=%C2%A3HELLO&ORIGINATOR=ORIG&NUMBERS=447796354848");
     $this->assertSame($history[0]->url, "https://api.zensend.io/v3/sendsms");
-    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));    
-  } 
+    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));
+  }
 
   private function request(){
     $request = new SmsRequest();
@@ -470,7 +460,7 @@ EOT
 
 
 
-  public function testShouldBeAbleToSendSmsWithOptionalParameter() 
+  public function testShouldBeAbleToSendSmsWithOptionalParameter()
   {
     stub_request("application/json", 200, <<<EOT
     {
@@ -479,15 +469,14 @@ EOT
           "numbers": 1,
           "smsparts": 1,
           "encoding": "gsm",
-          "cost_in_pence": 12.34,
-          "new_balance_in_pence": 10.2
+          "price": 12.34
       }
     }
 EOT
     );
 
     $client = new Client("API_KEY");
-    
+
     $request = new SmsRequest();
     $request->body = "TEST HELLO";
     $request->originator = "ORIG";
@@ -508,64 +497,7 @@ EOT
     $this->assertSame($history[0]->is_post, true);
     $this->assertSame($history[0]->post_body, "BODY=TEST+HELLO&ORIGINATOR=ORIG&NUMBERS=447796354848&TIMETOLIVE=60&ORIGINATOR_TYPE=alpha&ENCODING=gsm");
     $this->assertSame($history[0]->url, "https://api.zensend.io/v3/sendsms");
-    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));  
-  }
-
-  public function testCheckBalance()
-  {
-
-    stub_request("application/json", 200, <<<EOT
-    {
-      "success": {
-          "balance": 100.4
-      }
-    }
-EOT
-    );
-
-    $client = new Client("API_KEY");
-    $result = $client->check_balance();
-
-    $this->assertSame($result, 100.4);
-
-    $history = curl_request_history();
-
-    $this->assertSame(count($history), 1);
-    $this->assertSame($history[0]->is_post, false);
-    $this->assertSame($history[0]->post_body, NULL);
-    $this->assertSame($history[0]->url, "https://api.zensend.io/v3/checkbalance");
-    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));   
-
-  }
-
-  public function testGetPrices()
-  {
-
-    stub_request("application/json", 200, <<<EOT
-    {
-      "success": {
-          "prices_in_pence": {
-            "GB" : 1.23,
-            "US" : 1.24
-          }
-      }
-    }
-EOT
-    );
-
-    $client = new Client("API_KEY");
-    $result = $client->get_prices();
-
-    $this->assertSame($result, array("GB" => 1.23, "US" => 1.24));
-
-    $history = curl_request_history();
-
-    $this->assertSame(count($history), 1);
-    $this->assertSame($history[0]->is_post, false);
-    $this->assertSame($history[0]->post_body, NULL);
-    $this->assertSame($history[0]->url, "https://api.zensend.io/v3/prices");
-    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));   
-
+    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));
   }
 
 

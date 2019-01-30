@@ -8,7 +8,6 @@ class SmsResponse
   public $sms_parts;
   public $encoding;
   public $cost_in_pence;
-  public $new_balance_in_pence;
 }
 
 ?>

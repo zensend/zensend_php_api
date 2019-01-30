@@ -7,7 +7,6 @@ class OperatorLookupResponse
   public $mcc;
   public $operator;
   public $cost_in_pence;
-  public $new_balance_in_pence;
 }
 
 ?>
