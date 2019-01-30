@@ -272,95 +272,9 @@ EOT
     $this->assertSame($history[0]->is_post, true);
     $this->assertSame($history[0]->post_body, "BODY=TEST+HELLO&ORIGINATOR=ORIG&NUMBERS=447796354848");
     $this->assertSame($history[0]->url, "https://api.zensend.io/v3/sendsms");
-    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));    
-  } 
-
-  public function testCreateMsisdnVerification()
-  {
-
-    stub_request("application/json", 200, <<<EOT
-    {
-      "success": {
-          "session": "7CDEB38F-4370-18FD-D7CE-329F21B99209"
-      }
-    }
-EOT
-    );
-
-    $client = new Client("API_KEY");
-;
-
-    $result = $client->create_msisdn_verification("441234567890");
-
-    $this->assertSame($result, "7CDEB38F-4370-18FD-D7CE-329F21B99209");
-
-    $history = curl_request_history();
-
-    $this->assertSame(count($history), 1);
-    $this->assertSame($history[0]->is_post, true);
-    $this->assertSame($history[0]->post_body, "NUMBER=441234567890");
-    $this->assertSame($history[0]->url, "https://verify.zensend.io/api/msisdn_verify");
-    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));    
-  } 
-
-  public function testCreateMsisdnVerificationWithEmptyOptions()
-  {
-
-    stub_request("application/json", 200, <<<EOT
-    {
-      "success": {
-          "session": "7CDEB38F-4370-18FD-D7CE-329F21B99209"
-      }
-    }
-EOT
-    );
-
-    $client = new Client("API_KEY");
-;
-    $options = new VerifyOptions();
-    $result = $client->create_msisdn_verification("441234567890", $options);
-
-    $this->assertSame($result, "7CDEB38F-4370-18FD-D7CE-329F21B99209");
-
-    $history = curl_request_history();
-
-    $this->assertSame(count($history), 1);
-    $this->assertSame($history[0]->is_post, true);
-    $this->assertSame($history[0]->post_body, "NUMBER=441234567890");
-    $this->assertSame($history[0]->url, "https://verify.zensend.io/api/msisdn_verify");
-    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));    
+    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));
   }
 
-  public function testCreateMsisdnVerificationWithOptions()
-  {
-
-    stub_request("application/json", 200, <<<EOT
-    {
-      "success": {
-          "session": "7CDEB38F-4370-18FD-D7CE-329F21B99209"
-      }
-    }
-EOT
-    );
-
-    $client = new Client("API_KEY");
-;
-    $options = new VerifyOptions();
-    $options->message = "Hello {{token}}";
-    $options->originator = "VERIFYME";
-
-    $result = $client->create_msisdn_verification("441234567890", $options);
-
-    $this->assertSame($result, "7CDEB38F-4370-18FD-D7CE-329F21B99209");
-
-    $history = curl_request_history();
-
-    $this->assertSame(count($history), 1);
-    $this->assertSame($history[0]->is_post, true);
-    $this->assertSame($history[0]->post_body, "NUMBER=441234567890&MESSAGE=Hello+%7B%7Btoken%7D%7D&ORIGINATOR=VERIFYME");
-    $this->assertSame($history[0]->url, "https://verify.zensend.io/api/msisdn_verify");
-    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));    
-  }
 
   public function testSendPoundSms()
   {

@@ -3,18 +3,17 @@
 namespace ZenSend;
 
 
-  
-class Client 
+
+class Client
 {
   private $apiKey;
   private $url;
   private $http_options;
 
-  public function __construct($apiKey, $http_options = array(), $url = "https://api.zensend.io", $verify_url = "https://verify.zensend.io")
+  public function __construct($apiKey, $http_options = array(), $url = "https://api.zensend.io")
   {
     $this->apiKey = $apiKey;
     $this->url = $url;
-    $this->verify_url = $verify_url;
     $this->http_options = $http_options;
   }
 
@@ -92,32 +91,6 @@ class Client
     return $json["prices_in_pence"];
   }
 
-  public function create_msisdn_verification($msisdn, $verify_options = NULL)
-  {
-
-    $http_params = array("NUMBER" => $msisdn);
-
-    if ($verify_options != NULL) {
-      if (isset($verify_options->message)) {
-        $http_params["MESSAGE"] = $verify_options->message;
-      }
-
-      if (isset($verify_options->originator)) {
-        $http_params["ORIGINATOR"] = $verify_options->originator;
-      }
-    }
-
-    $json = $this->make_request($this->verify_url, true, "/api/msisdn_verify", $http_params);
-
-    return $json["session"]; 
-  }
-
-  public function msisdn_verification_status($session)
-  {
-    $http_params = array("SESSION" => $session);
-    $json = $this->make_request($this->verify_url, false, "/api/msisdn_verify", $http_params);
-    return $json["msisdn"];
-  }
 
   private function make_request($url, $is_post, $path, $params)
   {
@@ -158,7 +131,7 @@ class Client
     $rbody = curl_exec($curl);
 
     if ($rbody === false) {
-      
+
       $errno = curl_errno($curl);
       $message = curl_error($curl);
       curl_close($curl);
