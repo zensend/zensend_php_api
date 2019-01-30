@@ -1,5 +1,5 @@
 <?php
-namespace ZenSend;
+namespace Fonix;
 
 class SmsResponse
 {

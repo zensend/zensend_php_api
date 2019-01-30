@@ -1,6 +1,6 @@
 <?php
 
-namespace ZenSend;
+namespace Fonix;
 
 
 
@@ -10,7 +10,7 @@ class Client
   private $url;
   private $http_options;
 
-  public function __construct($apiKey, $http_options = array(), $url = "https://api.zensend.io")
+  public function __construct($apiKey, $http_options = array(), $url = "https://sonar.fonix.io")
   {
     $this->apiKey = $apiKey;
     $this->url = $url;
@@ -26,19 +26,6 @@ class Client
   public static function ca_file()
   {
     return dirname(__FILE__) . '/../data/GeoTrust_Global_CA.pem';
-  }
-
-  public function lookup_operator($msisdn)
-  {
-
-    $json = $this->make_request($this->url, false, "/v3/operator_lookup", array("NUMBER" => $msisdn));
-    $response = new OperatorLookupResponse();
-    $response->mcc = $json["mcc"];
-    $response->mnc = $json["mnc"];
-    $response->operator = $json["operator"];
-    $response->cost_in_pence = $json["price"];
-
-    return $response;
   }
 
   public function send_sms($sms_request)
@@ -63,7 +50,7 @@ class Client
     }
 
 
-    $json = $this->make_request($this->url, true, "/v3/sendsms", $http_params);
+    $json = $this->make_request($this->url, true, "/v2/sendsms", $http_params);
     $response = new SmsResponse();
     $response->tx_guid = $json["txguid"];
     $response->numbers = $json["numbers"];
@@ -84,7 +71,7 @@ class Client
 
     $opts = array();
     $opts[CURLOPT_RETURNTRANSFER] = 1;
-    $opts[CURLOPT_USERAGENT] = "ZenSend PHP";
+    $opts[CURLOPT_USERAGENT] = "Fonix PHP";
     $full_url = $url . $path;
     if ($is_post) {
       $opts[CURLOPT_POST] = 1;
@@ -133,12 +120,12 @@ class Client
       }
       if (array_key_exists("failure", $json)) {
         $failure = $json["failure"];
-        throw new ZenSendException($rcode, $failure);
+        throw new FonixException($rcode, $failure);
       } else {
-        throw new ZenSendException($rcode, null);
+        throw new FonixException($rcode, null);
       }
     } else {
-      throw new ZenSendException($rcode, null);
+      throw new FonixException($rcode, null);
     }
 
   }

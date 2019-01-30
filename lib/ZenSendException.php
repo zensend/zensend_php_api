@@ -1,8 +1,8 @@
 <?php
 
-namespace ZenSend;
+namespace Fonix;
 
-class ZenSendException extends \Exception
+class FonixException extends \Exception
 {
   public $failcode;
   public $parameter;

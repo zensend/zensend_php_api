@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.org/zensend/zensend_php_api.svg?branch=master)](https://travis-ci.org/zensend/zensend_php_api)
-# ZenSend PHP bindings
+[![Build Status](https://travis-ci.org/Fonix/zensend_php_api.svg?branch=master)](https://travis-ci.org/zensend/zensend_php_api)
+# Fonix PHP bindings
 
-You can sign up for a ZenSend account at https://zensend.io.
+You can sign up for a Fonix account at https://zensend.io.
 
 ## Requirements
 
@@ -13,7 +13,7 @@ You can install the bindings via [Composer](http://getcomposer.org/). Add this t
 
     {
       "require": {
-        "zensend/zensend": "1.0.4"
+        "Fonix/zensend": "1.0.4"
       }
     }
 
@@ -27,16 +27,16 @@ To use the bindings, use Composer's [autoload](https://getcomposer.org/doc/00-in
 
 ## Manual Installation
 
-If you do not wish to use Composer, you can download the [latest release](https://github.com/zensend/zensend_php_api/releases). Then, to use the bindings, include the `init.php` file.
+If you do not wish to use Composer, you can download the [latest release](https://github.com/Fonix/zensend_php_api/releases). Then, to use the bindings, include the `init.php` file.
 
-    require_once('/path/to/zensend_php_api/init.php');
+    require_once('/path/to/Fonix_php_api/init.php');
 
 ## Getting Started
 
 Simple usage looks like:
 
-    $client = new ZenSend\Client("api_key");
-    $request = new ZenSend\SmsRequest();
+    $client = new Fonix\Client("api_key");
+    $request = new Fonix\SmsRequest();
     $request->body = "BODY";
     $request->originator = "ORIG";
     $request->numbers = ["447700000000"];
@@ -52,7 +52,7 @@ After authenticating the user display the verify iframe using the following code
 
     <?php
       session_start();
-      $verify = new ZenSend\Verify("api_key");
+      $verify = new Fonix\Verify("api_key");
       $verify->create_session("441234567890"); // the number you want to verify
       $verify->write_tags("https://" . $_SERVER['HTTP_HOST'] . "/verify_callback.php");
     ?>
@@ -61,7 +61,7 @@ Create another file called verify_callback.php to handle verification:
 
     <?php
       session_start();
-      $verify = new ZenSend\Verify("api_key");
+      $verify = new Fonix\Verify("api_key");
       try {
         $verify->verify_response("441234567890");  // the number you want to verify
         // handle verification success
@@ -72,7 +72,7 @@ Create another file called verify_callback.php to handle verification:
 
 ## Documentation
 
-Please see https://zensend.io/public/docs for up-to-date documentation.
+Please see https://Fonix.io/public/docs for up-to-date documentation.
 
 ## Certificate Errors
 
@@ -82,9 +82,9 @@ If you receive errors like:
 
 This is likely because your php curl is not set up with a certificate bundle. This can be fixed by following the instructions here: https://support.zend.com/hc/en-us/articles/204159368-PHP-CURL-HTTPS-Error-SSL-certificate-problem-unable-to-get-local-issuer-certificate-
 
-Or alternatively we have included the CA certificates that we require in a bundle which can be used by creating the ZenSend Client like:
+Or alternatively we have included the CA certificates that we require in a bundle which can be used by creating the Fonix Client like:
 
-   $client = ZenSend\Client::newWithHardcodedCA("api_key");
+   $client = Fonix\Client::newWithHardcodedCA("api_key");
 
 ## String Encoding
 
@@ -104,11 +104,4 @@ To run the test suite:
 
     ~/.composer/vendor/bin/psysh
     >>> require('./init.php')
-    >>> $client = new ZenSend\Client("api_key", array(), "http://127.0.0.1:8084", "http://verify.fonix.dev");
-    >>> $response = $client->lookup_operator("441234567890");
-    >>> $client->create_msisdn_verification("441234567890");
-    >>> $client->msisdn_verification_status("a33d10fe587096a0b70d3701fc2c9f7e")
-    >>> $verify = new ZenSend\Verify("api_key", array(), "http://verify.fonix.dev");
-    >>> $verify->create_session("441234567890")
-    >>> $verify->write_tags("callback");
-
+    >>> $client = new Fonix\Client("api_key", array(), "http://127.0.0.1:8084");

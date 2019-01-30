@@ -1,6 +1,6 @@
 <?php
 
-namespace ZenSend;
+namespace Fonix;
 
 
 
@@ -161,71 +161,10 @@ EOT
     $this->assertSame(count($history), 1);
     $this->assertSame($history[0]->is_post, true);
     $this->assertSame($history[0]->post_body, "BODY=TEST+HELLO&ORIGINATOR=ORIG&NUMBERS=447796354848%2C447796354849");
-    $this->assertSame($history[0]->url, "https://api.zensend.io/v3/sendsms");
+    $this->assertSame($history[0]->url, "https://sonar.fonix.io/v2/sendsms");
     $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));
   }
 
-  public function testOperatorLookup()
-  {
-
-    stub_request("application/json", 200, <<<EOT
-    {
-      "success": {
-          "mcc": "123",
-          "mnc": "456",
-          "operator": "o2-uk",
-          "price": 2.5
-      }
-    }
-EOT
-    );
-
-    $client = new Client("API_KEY");
-
-
-    $result = $client->lookup_operator("441234567890");
-
-    $this->assertSame($result->mcc, "123");
-    $this->assertSame($result->mnc, "456");
-    $this->assertSame($result->operator, "o2-uk");
-    $this->assertSame($result->cost_in_pence, 2.5);
-
-    $history = curl_request_history();
-
-    $this->assertSame(count($history), 1);
-    $this->assertSame($history[0]->is_post, false);
-    $this->assertSame($history[0]->post_body, null);
-    $this->assertSame($history[0]->url, "https://api.zensend.io/v3/operator_lookup?NUMBER=441234567890");
-    $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));
-  }
-
-
-  public function testOperatorLookupError()
-  {
-
-    stub_request("application/json", 503, <<<EOT
-    {
-      "failure": {
-          "failcode": "TOO_MANY_CHARACTERS",
-          "parameter": "body"
-      }
-    }
-EOT
-    );
-
-    $client = new Client("API_KEY");
-
-
-    try {
-      $client->lookup_operator("441234567890");
-    } catch (\ZenSend\ZenSendException $e) {
-      $this->assertSame($e->http_code, 503);
-      $this->assertSame($e->failcode, "TOO_MANY_CHARACTERS");
-      $this->assertSame($e->parameter, "body");
-      return;
-    }
-
-  }
 
   public function testSendSms()
   {
@@ -262,7 +201,7 @@ EOT
     $this->assertSame(count($history), 1);
     $this->assertSame($history[0]->is_post, true);
     $this->assertSame($history[0]->post_body, "BODY=TEST+HELLO&ORIGINATOR=ORIG&NUMBERS=447796354848");
-    $this->assertSame($history[0]->url, "https://api.zensend.io/v3/sendsms");
+    $this->assertSame($history[0]->url, "https://sonar.fonix.io/v2/sendsms");
     $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));
   }
 
@@ -296,7 +235,7 @@ EOT
     $this->assertSame(count($history), 1);
     $this->assertSame($history[0]->is_post, true);
     $this->assertSame($history[0]->post_body, "BODY=%C2%A3HELLO&ORIGINATOR=ORIG&NUMBERS=447796354848");
-    $this->assertSame($history[0]->url, "https://api.zensend.io/v3/sendsms");
+    $this->assertSame($history[0]->url, "https://sonar.fonix.io/v2/sendsms");
     $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));
   }
 
@@ -324,7 +263,7 @@ EOT
     $client = new Client("API_KEY");
     try {
       $client->send_sms($this->request());
-    } catch (\ZenSend\ZenSendException $e) {
+    } catch (\Fonix\FonixException $e) {
       $this->assertSame($e->http_code, 400);
       $this->assertSame($e->failcode, "GENERIC_ERROR");
       $this->assertSame($e->parameter, null);
@@ -353,7 +292,7 @@ EOT
     $client = new Client("API_KEY");
     try {
       $client->send_sms($this->request());
-    } catch (\ZenSend\ZenSendException $e) {
+    } catch (\Fonix\FonixException $e) {
       $this->assertSame($e->http_code, 400);
       $this->assertSame($e->failcode, "IS_EMPTY");
       $this->assertSame($e->parameter, "BODY");
@@ -379,7 +318,7 @@ EOT
     $client = new Client("API_KEY");
     try {
       $client->send_sms($this->request());
-    } catch (\ZenSend\ZenSendException $e) {
+    } catch (\Fonix\FonixException $e) {
       $this->assertSame($e->http_code, 400);
       $this->assertSame($e->failcode, null);
       $this->assertSame($e->parameter, null);
@@ -399,7 +338,7 @@ EOT
     $client = new Client("API_KEY");
     try {
       $client->send_sms($this->request());
-    } catch (\ZenSend\ZenSendException $e) {
+    } catch (\Fonix\FonixException $e) {
       $this->assertSame($e->http_code, 503);
       $this->assertSame($e->failcode, null);
       $this->assertSame($e->parameter, null);
@@ -418,7 +357,7 @@ EOT
     $client = new Client("API_KEY");
     try {
       $client->send_sms($this->request());
-    } catch (\ZenSend\NetworkException $e) {
+    } catch (\Fonix\NetworkException $e) {
       $this->assertSame($e->curl_error, CURLE_COULDNT_CONNECT);
       $this->assertSame($e->curl_message, "CURL Could not connect");
       return;
@@ -496,7 +435,7 @@ EOT
     $this->assertSame(count($history), 1);
     $this->assertSame($history[0]->is_post, true);
     $this->assertSame($history[0]->post_body, "BODY=TEST+HELLO&ORIGINATOR=ORIG&NUMBERS=447796354848&TIMETOLIVE=60&ORIGINATOR_TYPE=alpha&ENCODING=gsm");
-    $this->assertSame($history[0]->url, "https://api.zensend.io/v3/sendsms");
+    $this->assertSame($history[0]->url, "https://sonar.fonix.io/v2/sendsms");
     $this->assertSame($history[0]->headers, array("X-API-KEY: API_KEY"));
   }
 
