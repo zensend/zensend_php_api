@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/Fonix/zensend_php_api.svg?branch=master)](https://travis-ci.org/zensend/zensend_php_api)
 # Fonix PHP bindings
 
-You can sign up for a Fonix account at https://zensend.io.
+Please contact use at https://fonix.com/contact-us to get started.
 
 ## Requirements
 
@@ -46,29 +46,6 @@ Simple usage looks like:
     echo $result->encoding;
     echo $result->tx_guid;
 
-## Verify Getting Started
-
-After authenticating the user display the verify iframe using the following code:
-
-    <?php
-      session_start();
-      $verify = new Fonix\Verify("api_key");
-      $verify->create_session("441234567890"); // the number you want to verify
-      $verify->write_tags("https://" . $_SERVER['HTTP_HOST'] . "/verify_callback.php");
-    ?>
-
-Create another file called verify_callback.php to handle verification:
-
-    <?php
-      session_start();
-      $verify = new Fonix\Verify("api_key");
-      try {
-        $verify->verify_response("441234567890");  // the number you want to verify
-        // handle verification success
-      } catch (Exception $e) {
-        // handle verification failed
-      }
-    ?>
 
 ## Documentation
 
