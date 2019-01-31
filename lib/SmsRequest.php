@@ -1,6 +1,6 @@
 <?php
-namespace Fonix;
 
+namespace Fonix;
 class SmsRequest
 {
   public $body;

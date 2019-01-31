@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Fonix/zensend_php_api.svg?branch=master)](https://travis-ci.org/zensend/zensend_php_api)
+[![Build Status](https://travis-ci.org/zensend/zensend_php_api.svg?branch=master)](https://travis-ci.org/zensend/zensend_php_api)
 # Fonix PHP bindings
 
 Please contact use at https://fonix.com/contact-us to get started.
@@ -13,7 +13,7 @@ You can install the bindings via [Composer](http://getcomposer.org/). Add this t
 
     {
       "require": {
-        "Fonix/zensend": "1.0.4"
+        "zensend/zensend": "1.0.4"
       }
     }
 
@@ -27,9 +27,9 @@ To use the bindings, use Composer's [autoload](https://getcomposer.org/doc/00-in
 
 ## Manual Installation
 
-If you do not wish to use Composer, you can download the [latest release](https://github.com/Fonix/zensend_php_api/releases). Then, to use the bindings, include the `init.php` file.
+If you do not wish to use Composer, you can download the [latest release](https://github.com/zensend/zensend_php_api/releases). Then, to use the bindings, include the `init.php` file.
 
-    require_once('/path/to/Fonix_php_api/init.php');
+    require_once('/path/to/zensend_php_api/init.php');
 
 ## Getting Started
 
@@ -49,7 +49,7 @@ Simple usage looks like:
 
 ## Documentation
 
-Please see https://Fonix.io/public/docs for up-to-date documentation.
+Please see https://fonix.io/public/docs for up-to-date documentation.
 
 ## Certificate Errors
 
