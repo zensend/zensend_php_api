@@ -56,7 +56,6 @@ class Client
     $response->numbers = $json["numbers"];
     $response->sms_parts = $json["smsparts"];
     $response->encoding = $json["encoding"];
-    $response->cost_in_pence = $json["price"];
 
     return $response;
   }
