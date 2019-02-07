@@ -209,8 +209,8 @@ EOT
     {
       "success": {
           "txguid": "7CDEB38F-4370-18FD-D7CE-329F21B99209",
-          "numbers": 1,
-          "smsparts": 1,
+          "numbers": "1",
+          "smsparts": "1",
           "encoding": "gsm"
       }
     }
