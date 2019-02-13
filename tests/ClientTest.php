@@ -134,8 +134,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
   {
     "success": {
         "txguid": "7CDEB38F-4370-18FD-D7CE-329F21B99209",
-        "numbers": "2",
-        "smsparts": "1",
+        "numbers": 2,
+        "smsparts": 1,
         "encoding": "gsm"
     }
   }
@@ -149,8 +149,8 @@ EOT
     $request->numbers = array("447796354848","447796354849");
     $result = $client->send_sms($request);
 
-    $this->assertSame($result->numbers, "2");
-    $this->assertSame($result->sms_parts, "1");
+    $this->assertSame($result->numbers, 2);
+    $this->assertSame($result->sms_parts, 1);
     $this->assertSame($result->encoding, "gsm");
     $this->assertSame($result->tx_guid, "7CDEB38F-4370-18FD-D7CE-329F21B99209");
 
@@ -171,8 +171,8 @@ EOT
 {
     "success": {
         "txguid": "7CDEB38F-4370-18FD-D7CE-329F21B99209",
-        "numbers": "1",
-        "smsparts": "1",
+        "numbers": 1,
+        "smsparts": 1,
         "encoding": "gsm"
     }
 }
@@ -187,8 +187,8 @@ EOT
 
     $result = $client->send_sms($request);
 
-    $this->assertSame($result->numbers, "1");
-    $this->assertSame($result->sms_parts, "1");
+    $this->assertSame($result->numbers, 1);
+    $this->assertSame($result->sms_parts, 1);
     $this->assertSame($result->encoding, "gsm");
     $this->assertSame($result->tx_guid, "7CDEB38F-4370-18FD-D7CE-329F21B99209");
 
@@ -209,8 +209,8 @@ EOT
     {
       "success": {
           "txguid": "7CDEB38F-4370-18FD-D7CE-329F21B99209",
-          "numbers": "1",
-          "smsparts": "1",
+          "numbers": 1,
+          "smsparts": 1,
           "encoding": "gsm"
       }
     }
@@ -400,8 +400,8 @@ EOT
     {
       "success": {
         "txguid": "7CDEB38F-4370-18FD-D7CE-329F21B99209",
-        "numbers": "1",
-        "smsparts": "1",
+        "numbers": 1,
+        "smsparts": 1,
         "encoding": "gsm"
       }
     }
@@ -419,8 +419,8 @@ EOT
     $request->timetolive_in_minutes = 60;
     $result = $client->send_sms($request);
 
-    $this->assertSame($result->numbers, "1");
-    $this->assertSame($result->sms_parts, "1");
+    $this->assertSame($result->numbers, 1);
+    $this->assertSame($result->sms_parts, 1);
     $this->assertSame($result->encoding, "gsm");
     $this->assertSame($result->tx_guid, "7CDEB38F-4370-18FD-D7CE-329F21B99209");
 

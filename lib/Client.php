@@ -53,8 +53,8 @@ class Client
     $json = $this->make_request($this->url, true, "/v2/sendsms", $http_params);
     $response = new SmsResponse();
     $response->tx_guid = $json["txguid"];
-    $response->numbers = $json["numbers"];
-    $response->sms_parts = $json["smsparts"];
+    $response->numbers = (int)$json["numbers"];
+    $response->sms_parts = (int)$json["smsparts"];
     $response->encoding = $json["encoding"];
 
     return $response;
